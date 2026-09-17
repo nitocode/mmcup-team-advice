@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>MMCup 2026 — Le Grand Sondage Officiel</title>
+    <meta
+      name="description"
+      content="Sondage officiel de la MMCup. Saisissez librement le nom de l'équipe gagnante."
+    />
+    <link rel="icon" href="assets/logos/truffassons.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lobster&family=Luckiest+Guy&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="assets/style.css" />
+  </head>
+  <body>
+    <!-- Decorative team logos, purely for the wallpaper effect. -->
+    <div class="decor" aria-hidden="true">
+      <img class="floaty f1" src="assets/logos/quichassons.png" alt="" />
+      <img class="floaty f2" src="assets/logos/crepassons.png" alt="" />
+      <img class="floaty f3" src="assets/logos/paillassons.png" alt="" />
+      <img class="floaty f4" src="assets/logos/blairassons.png" alt="" />
+      <img class="floaty f5" src="assets/logos/granfrissons.png" alt="" />
+      <img class="floaty f6" src="assets/logos/smithetwessons.png" alt="" />
+      <img class="floaty f7" src="assets/logos/zigouillassons.webp" alt="" />
+      <img class="floaty f8" src="assets/logos/truffassons.png" alt="" />
+      <span class="sparkle s1">&#10022;</span>
+      <span class="sparkle s2">&#10022;</span>
+      <span class="sparkle s3">&#10022;</span>
+      <span class="sparkle s4">&#10022;</span>
+    </div>
+
+    <button id="guideDog" class="guide-dog" type="button" title="Mode chien guide">
+      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <ellipse cx="6.3" cy="10.1" rx="2.1" ry="2.6" transform="rotate(-20 6.3 10.1)" />
+        <ellipse cx="10.4" cy="6.6" rx="2.1" ry="2.8" />
+        <ellipse cx="15.1" cy="6.6" rx="2.1" ry="2.8" />
+        <ellipse cx="19.2" cy="10.1" rx="2.1" ry="2.6" transform="rotate(20 19.2 10.1)" />
+        <path
+          d="M12.7 11.3c3 0 5.4 2.3 5.4 5.1 0 2.2-1.7 3.7-3.9 3.7-.9 0-1.2-.2-1.5-.2s-.6.2-1.5.2c-2.2 0-3.9-1.5-3.9-3.7 0-2.8 2.4-5.1 5.4-5.1Z"
+        />
+      </svg>
+      <span>Chien guide</span>
+    </button>
+
+    <div class="ticker" aria-hidden="true">
+      <div class="ticker-track">
+        <span>
+          &#10022; SONDAGE OFFICIEL DE LA MMCUP &#10022; 100&nbsp;% INDEPENDANT &#10022; AUCUNE
+          INFLUENCE EXTERIEURE &#10022; VOTEZ EN TOUTE LIBERTE &#10022; RESULTATS CERTIFIES PAR
+          NOS SERVICES &#10022;
+        </span>
+        <span>
+          &#10022; SONDAGE OFFICIEL DE LA MMCUP &#10022; 100&nbsp;% INDEPENDANT &#10022; AUCUNE
+          INFLUENCE EXTERIEURE &#10022; VOTEZ EN TOUTE LIBERTE &#10022; RESULTATS CERTIFIES PAR
+          NOS SERVICES &#10022;
+        </span>
+      </div>
+    </div>
+
+    <main class="stage">
+      <p class="kicker">&#9733; Edition 2026 &#9733;</p>
+      <h1 class="title">Qui a gagné la MMCup&nbsp;?</h1>
+      <p class="subtitle">
+        Tapez le nom de l'équipe gagnante. Réponse totalement libre, promis juré.
+      </p>
+
+      <section class="panel">
+        <span class="sticker">NEW!</span>
+
+        <form id="voteForm" autocomplete="off" novalidate>
+          <label class="field-label" for="teamInput">Nom de l'équipe gagnante</label>
+          <input
+            id="teamInput"
+            class="field"
+            type="text"
+            name="team"
+            placeholder="Saisissez votre réponse ici..."
+            autocomplete="off"
+            autocapitalize="off"
+            autocorrect="off"
+            spellcheck="false"
+            enterkeyhint="send"
+          />
+          <p id="hint" class="hint" role="status">&nbsp;</p>
+          <button class="vote-button" type="submit">Valider mon vote</button>
+        </form>
+
+        <p class="fineprint">
+          Votre vote est anonyme, chiffré, et relu par un comité de chiens indépendants.
+        </p>
+      </section>
+
+      <div class="counter" aria-hidden="true">
+        <span class="counter-label">Visiteurs</span>
+        <span class="counter-digits" id="counter">0000137</span>
+      </div>
+
+      <footer class="footer">
+        <span class="badge">Best viewed in 1024 &times; 768</span>
+        <span class="badge">Optimisé pour Internet Explorer 8</span>
+        <span class="badge">Powered by HTML5 &amp; friendship</span>
+        <p class="copyright">© 2026 Comité d'organisation de la MMCup — tous droits réservés</p>
+      </footer>
+    </main>
+
+    <script src="assets/app.js"></script>
+  </body>
+</html>
