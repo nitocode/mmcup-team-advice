@@ -17,9 +17,11 @@ the team logos as wallpaper. Open `index.html` to work on it.
   drop are cancelled too.
 - **Deleting.** Backspace and Delete also reveal a letter, and the first attempt
   arms a three second timer.
-- **Leaving.** Submitting the form, that timer expiring, or the developer tools
-  opening all call `finale()`, which types the word out over one second and then
-  sends the browser to the video.
+- **The verdict.** Submitting the form, that timer expiring, or the developer
+  tools opening all call `finale()`, which types the word out over one second and
+  then opens a modal playing the video in an embedded player. Closing the modal
+  drops the iframe, which is what stops the audio, and re-arms every trap so the
+  page can be handed to the next colleague without a reload.
 - **Developer tools.** Four signals: the F12 and Ctrl/Cmd+Shift+I/J/C shortcuts,
   a viewport gap that grows after load, a console bait object whose getter only
   runs when a panel renders it, and a `debugger` statement that only costs time
@@ -27,7 +29,14 @@ the team logos as wallpaper. Open `index.html` to work on it.
   at load, so an embedded frame or a browser sidebar is not mistaken for a panel.
 
 The guide dog button is carried over from the MMCup Team HQ globe, but here it
-skips the ceremony and goes straight to the video.
+skips the ceremony and opens the video straight away.
+
+The player is loaded from `youtube-nocookie.com`, which keeps the tracking down.
+It does not remove the ads: YouTube serves those on embedded players too, and
+there is no honest way around that from an embed.
+
+Append `?safe=1` to keep every trap armed while reporting the trigger in the hint
+line instead of opening the video. Useful to demonstrate the mechanism.
 
 ## Deployment
 

@@ -4,30 +4,42 @@
  * Whatever key is pressed, the input reveals the next letter of TRUFFASSONS.
  * Trying to delete reveals a letter too, and arms a three second countdown.
  * Submitting, opening the developer tools or hitting that countdown all end
- * the same way: the word is typed out over one second, then the browser goes
- * to the video.
+ * the same way: the word is typed out over one second, then the verdict modal
+ * opens and plays the video in place. Closing it re-arms everything, so the
+ * gag can be shown to the next colleague without a reload.
  */
 ;(function () {
   'use strict'
 
   var TARGET = 'TRUFFASSONS'
-  var VIDEO = 'https://youtu.be/EpX1_YJPGAY?is=xHtBuKnKv4oC6LeE'
+  var VIDEO_ID = 'EpX1_YJPGAY'
+  var VIDEO_PAGE = 'https://youtu.be/' + VIDEO_ID
   var DELETE_GRACE_MS = 3000
   var TYPE_ANIMATION_MS = 1000
 
-  // ?safe=1 keeps every trap but reports instead of leaving the page, so the
-  // gag can be demonstrated (and tested) without the redirect.
+  // ?safe=1 keeps every trap but reports instead of opening the video, which
+  // is handy to demonstrate the mechanism without the punchline.
   var SAFE = /[?&]safe=1(&|$)/.test(window.location.search)
 
   var input = document.getElementById('teamInput')
   var form = document.getElementById('voteForm')
   var hint = document.getElementById('hint')
   var guideDogButton = document.getElementById('guideDog')
+  var modal = document.getElementById('videoModal')
+  var modalClose = document.getElementById('modalClose')
+  var modalBackdrop = document.getElementById('modalBackdrop')
+  var videoSlot = document.getElementById('videoSlot')
+  var videoFallback = document.getElementById('videoFallback')
 
   var revealed = 0
   var deleteTimer = null
   var watchers = []
   var finished = false
+  var modalOpen = false
+  var wideRuns = 0
+  var slowRuns = 0
+
+  videoFallback.href = VIDEO_PAGE
 
   /* ---------------------------------------------------------------- input */
 
@@ -167,10 +179,13 @@
   guideDogButton.addEventListener('click', function () {
     // No ceremony here: the guide dog leads straight to the answer.
     if (SAFE) {
-      say('[safe] redirection neutralisée, déclencheur : chien guide', false)
+      say('[safe] vidéo neutralisée, déclencheur : chien guide', false)
       return
     }
-    window.location.href = VIDEO
+    finished = true
+    stopWatchers()
+    clearTimeout(deleteTimer)
+    openVideo()
   })
 
   /* ------------------------------------------------------- devtools watch */
@@ -189,34 +204,97 @@
   var baseWidthGap = Math.max(0, (window.outerWidth || 0) - window.innerWidth)
   var baseHeightGap = Math.max(0, (window.outerHeight || 0) - window.innerHeight)
 
-  var wideRuns = 0
-  addInterval(function () {
-    if (!window.outerWidth) return
-    var widthGap = window.outerWidth - window.innerWidth
-    var heightGap = window.outerHeight - window.innerHeight
-    var opened = widthGap - baseWidthGap > 140 || heightGap - baseHeightGap > 140
-    wideRuns = opened ? wideRuns + 1 : 0
-    if (wideRuns >= 2) finale('devtools')
-  }, 600)
+  function startWatchers() {
+    stopWatchers()
+    wideRuns = 0
+    slowRuns = 0
 
+    addInterval(function () {
+      if (!window.outerWidth) return
+      var widthGap = window.outerWidth - window.innerWidth
+      var heightGap = window.outerHeight - window.innerHeight
+      var opened = widthGap - baseWidthGap > 140 || heightGap - baseHeightGap > 140
+      wideRuns = opened ? wideRuns + 1 : 0
+      if (wideRuns >= 2) finale('devtools')
+    }, 600)
 
-  // A debugger statement only costs time while the tools are open. Two
-  // consecutive slow runs, so a garbage collection pause is not a verdict.
-  var slowRuns = 0
-  addInterval(function () {
-    var started = Date.now()
-    // eslint-disable-next-line no-debugger
-    debugger
-    slowRuns = Date.now() - started > 180 ? slowRuns + 1 : 0
-    if (slowRuns >= 3) finale('devtools')
-  }, 1200)
+    // A debugger statement only costs time while the tools are open. Three
+    // consecutive slow runs, so a garbage collection pause is not a verdict.
+    addInterval(function () {
+      var started = Date.now()
+      // eslint-disable-next-line no-debugger
+      debugger
+      slowRuns = Date.now() - started > 180 ? slowRuns + 1 : 0
+      if (slowRuns >= 3) finale('devtools')
+    }, 1200)
+  }
+
+  startWatchers()
 
   window.addEventListener('keydown', function (e) {
+    if (modalOpen && e.key === 'Escape') {
+      closeVideo()
+      return
+    }
     if (isDevToolsCombo(e)) {
       e.preventDefault()
       finale('devtools')
     }
   })
+
+  /* ---------------------------------------------------------------- modal */
+
+  function embedUrl() {
+    // youtube-nocookie keeps the tracking down. It does not remove the ads:
+    // there is no honest way to do that from an embed.
+    return (
+      'https://www.youtube-nocookie.com/embed/' +
+      VIDEO_ID +
+      '?autoplay=1&playsinline=1&rel=0&modestbranding=1'
+    )
+  }
+
+  function openVideo() {
+    if (modalOpen) return
+    modalOpen = true
+
+    var frame = document.createElement('iframe')
+    frame.src = embedUrl()
+    frame.title = 'Le verdict officiel de la MMCup'
+    frame.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen'
+    frame.referrerPolicy = 'strict-origin-when-cross-origin'
+    frame.setAttribute('allowfullscreen', '')
+    videoSlot.appendChild(frame)
+
+    modal.hidden = false
+    document.body.classList.add('modal-open')
+    modalClose.focus()
+  }
+
+  function closeVideo() {
+    if (!modalOpen) return
+    modalOpen = false
+    modal.hidden = true
+    // Dropping the iframe is what actually stops the audio.
+    videoSlot.innerHTML = ''
+    document.body.classList.remove('modal-open')
+    resetTrap()
+  }
+
+  function resetTrap() {
+    finished = false
+    revealed = 0
+    clearTimeout(deleteTimer)
+    deleteTimer = null
+    input.removeAttribute('readonly')
+    input.value = ''
+    say('', false)
+    startWatchers()
+    input.focus()
+  }
+
+  modalClose.addEventListener('click', closeVideo)
+  modalBackdrop.addEventListener('click', closeVideo)
 
   /* --------------------------------------------------------------- finale */
 
@@ -244,12 +322,10 @@
       if (index >= TARGET.length) {
         clearInterval(typer)
         if (SAFE) {
-          say('[safe] redirection neutralisée, déclencheur : ' + reason, false)
+          say('[safe] vidéo neutralisée, déclencheur : ' + reason, false)
           return
         }
-        setTimeout(function () {
-          window.location.href = VIDEO
-        }, 120)
+        setTimeout(openVideo, 120)
       }
     }, step)
   }
