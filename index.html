@@ -115,10 +115,14 @@
           <span id="modalTitle" class="modal-title">&#10022; Le verdict officiel &#10022;</span>
           <button id="modalClose" class="modal-close" type="button" aria-label="Fermer">&times;</button>
         </div>
-        <div class="modal-video"><div id="videoSlot"></div></div>
+        <div class="modal-video">
+          <video id="verdictVideo" class="modal-media" playsinline controls preload="auto">
+            <source src="assets/video/verdict.mp4" type="video/mp4" />
+          </video>
+        </div>
         <p class="modal-foot">
-          La lecture ne démarre pas ?
-          <a id="videoFallback" href="#" target="_blank" rel="noopener">Ouvrir sur YouTube</a>
+          <span id="modalNote">Résultat certifié par le comité d'organisation.</span>
+          <button id="unmuteButton" class="modal-unmute" type="button" hidden>Activer le son</button>
         </p>
       </div>
     </div>

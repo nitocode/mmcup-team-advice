@@ -513,12 +513,14 @@ body.modal-open {
   background: #000;
 }
 
-.modal-video iframe {
+.modal-media {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   border: 0;
+  background: #000;
+  object-fit: contain;
 }
 
 .modal-foot {
@@ -529,7 +531,25 @@ body.modal-open {
   text-align: center;
 }
 
-.modal-foot a {
-  color: #123a86;
+.modal-unmute {
+  padding: 5px 12px;
+  border: 2px solid #0d5a17;
+  border-radius: 999px;
+  background: linear-gradient(#b6f58a, var(--grass) 48%, var(--grass-deep));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9), 0 3px 0 #0d5a17;
+  color: #fff;
+  font-family: "Comic Sans MS", "Chalkboard SE", cursive;
+  font-size: 12px;
   font-weight: bold;
+  text-shadow: 1px 1px 0 #0d5a17;
+  cursor: pointer;
+}
+
+.modal-unmute[hidden] {
+  display: none;
+}
+
+.modal-unmute:active {
+  transform: translateY(2px);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9), 0 1px 0 #0d5a17;
 }

@@ -5,15 +5,13 @@
  * Trying to delete reveals a letter too, and arms a three second countdown.
  * Submitting, opening the developer tools or hitting that countdown all end
  * the same way: the word is typed out over one second, then the verdict modal
- * opens and plays the video in place. Closing it re-arms everything, so the
- * gag can be shown to the next colleague without a reload.
+ * opens and plays the verdict clip in place. Closing it re-arms everything, so
+ * the gag can be shown to the next colleague without a reload.
  */
 ;(function () {
   'use strict'
 
   var TARGET = 'TRUFFASSONS'
-  var VIDEO_ID = 'EpX1_YJPGAY'
-  var VIDEO_PAGE = 'https://youtu.be/' + VIDEO_ID
   var DELETE_GRACE_MS = 3000
   var TYPE_ANIMATION_MS = 1000
 
@@ -28,8 +26,9 @@
   var modal = document.getElementById('videoModal')
   var modalClose = document.getElementById('modalClose')
   var modalBackdrop = document.getElementById('modalBackdrop')
-  var videoSlot = document.getElementById('videoSlot')
-  var videoFallback = document.getElementById('videoFallback')
+  var video = document.getElementById('verdictVideo')
+  var modalNote = document.getElementById('modalNote')
+  var unmuteButton = document.getElementById('unmuteButton')
 
   var revealed = 0
   var deleteTimer = null
@@ -38,8 +37,6 @@
   var modalOpen = false
   var wideRuns = 0
   var slowRuns = 0
-
-  videoFallback.href = VIDEO_PAGE
 
   /* ---------------------------------------------------------------- input */
 
@@ -244,39 +241,44 @@
 
   /* ---------------------------------------------------------------- modal */
 
-  function embedUrl() {
-    // youtube-nocookie keeps the tracking down. It does not remove the ads:
-    // there is no honest way to do that from an embed.
-    return (
-      'https://www.youtube-nocookie.com/embed/' +
-      VIDEO_ID +
-      '?autoplay=1&playsinline=1&rel=0&modestbranding=1'
-    )
+  function playVerdict() {
+    video.currentTime = 0
+    video.muted = false
+    unmuteButton.hidden = true
+    modalNote.hidden = false
+
+    var attempt = video.play()
+    if (!attempt || typeof attempt.catch !== 'function') return
+
+    attempt.catch(function () {
+      // The browser refused sound without a fresh gesture: play muted and
+      // offer the switch rather than leaving a still frame.
+      video.muted = true
+      modalNote.hidden = true
+      unmuteButton.hidden = false
+      video.play().catch(function () {
+        unmuteButton.hidden = true
+        modalNote.hidden = false
+        modalNote.textContent = 'Appuyez sur lecture pour connaître le verdict.'
+      })
+    })
   }
 
   function openVideo() {
     if (modalOpen) return
     modalOpen = true
-
-    var frame = document.createElement('iframe')
-    frame.src = embedUrl()
-    frame.title = 'Le verdict officiel de la MMCup'
-    frame.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen'
-    frame.referrerPolicy = 'strict-origin-when-cross-origin'
-    frame.setAttribute('allowfullscreen', '')
-    videoSlot.appendChild(frame)
-
     modal.hidden = false
     document.body.classList.add('modal-open')
     modalClose.focus()
+    playVerdict()
   }
 
   function closeVideo() {
     if (!modalOpen) return
     modalOpen = false
     modal.hidden = true
-    // Dropping the iframe is what actually stops the audio.
-    videoSlot.innerHTML = ''
+    video.pause()
+    video.currentTime = 0
     document.body.classList.remove('modal-open')
     resetTrap()
   }
@@ -292,6 +294,13 @@
     startWatchers()
     input.focus()
   }
+
+  unmuteButton.addEventListener('click', function () {
+    video.muted = false
+    unmuteButton.hidden = true
+    modalNote.hidden = false
+    video.play()
+  })
 
   modalClose.addEventListener('click', closeVideo)
   modalBackdrop.addEventListener('click', closeVideo)
