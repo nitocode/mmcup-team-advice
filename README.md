@@ -1,7 +1,7 @@
 # MMCup — Le Grand Sondage Officiel
 
-A one page prank for the internal MMCup competition. The page asks who won and
-promises a free answer. Every keystroke reveals the next letter of
+A one page prank for the internal MMCup competition. The page asks who is going to win
+and promises a free answer. Every keystroke reveals the next letter of
 `TRUFFASSONS`, and so does every attempt to delete one.
 
 No framework and no build step: `index.html`, one stylesheet, one script, and
