@@ -4,8 +4,17 @@ A one page prank for the internal MMCup competition. The page asks who is going 
 and promises a free answer. Every keystroke reveals the next letter of
 `TRUFFASSONS`, and so does every attempt to delete one.
 
-No framework and no build step: `index.html`, one stylesheet, one script, and
-the team logos as wallpaper. Open `index.html` to work on it.
+No framework and no build step: `index.html`, one stylesheet, two scripts, the
+team logos as wallpaper and the verdict clip. Open `index.html` to work on it.
+
+## Languages
+
+French and English, switched from the pills in the top left corner. The choice
+is kept in `localStorage` and otherwise follows the browser. `assets/i18n.js`
+holds both dictionaries: static text carries `data-i18n` (or `data-i18n-<attr>`
+for placeholders, titles and labels), and anything written at runtime goes
+through `MMCup.t(key)` and repaints on `MMCup.onChange`, so switching language
+mid-countdown rewrites the warning that is already on screen.
 
 ## How the trap works
 

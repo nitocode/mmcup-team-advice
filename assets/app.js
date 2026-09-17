@@ -52,14 +52,39 @@
     }
   }
 
-  function say(message, blink) {
-    hint.textContent = message
-    hint.className = blink ? 'hint blink' : 'hint'
+  var hintState = null
+  var noteKey = 'modal.note'
+
+  function say(key, blink, reasonKey) {
+    hintState = key ? { key: key, blink: !!blink, reasonKey: reasonKey || null } : null
+    renderHint()
   }
+
+  function renderHint() {
+    if (!hintState) {
+      hint.textContent = ''
+      hint.className = 'hint'
+      return
+    }
+    var vars = hintState.reasonKey ? { reason: MMCup.t(hintState.reasonKey) } : null
+    hint.textContent = MMCup.t(hintState.key, vars)
+    hint.className = hintState.blink ? 'hint blink' : 'hint'
+  }
+
+  function renderNote() {
+    modalNote.textContent = MMCup.t(noteKey)
+  }
+
+  // A language switch repaints the static text on its own; these two are
+  // drawn at runtime, so they have to be asked to repaint as well.
+  MMCup.onChange(function () {
+    renderHint()
+    renderNote()
+  })
 
   function noteDeleteAttempt() {
     if (deleteTimer || finished) return
-    say('Effacer ? Le comité a déjà noté votre réponse...', true)
+    say('hint.delete', true)
     deleteTimer = setTimeout(function () {
       finale('delete')
     }, DELETE_GRACE_MS)
@@ -176,7 +201,7 @@
   guideDogButton.addEventListener('click', function () {
     // No ceremony here: the guide dog leads straight to the answer.
     if (SAFE) {
-      say('[safe] vidéo neutralisée, déclencheur : chien guide', false)
+      say('safe', false, 'reason.guideDog')
       return
     }
     finished = true
@@ -246,6 +271,8 @@
     video.muted = false
     unmuteButton.hidden = true
     modalNote.hidden = false
+    noteKey = 'modal.note'
+    renderNote()
 
     var attempt = video.play()
     if (!attempt || typeof attempt.catch !== 'function') return
@@ -259,7 +286,8 @@
       video.play().catch(function () {
         unmuteButton.hidden = true
         modalNote.hidden = false
-        modalNote.textContent = 'Appuyez sur lecture pour connaître le verdict.'
+        noteKey = 'modal.pressPlay'
+        renderNote()
       })
     })
   }
@@ -290,7 +318,7 @@
     deleteTimer = null
     input.removeAttribute('readonly')
     input.value = ''
-    say('', false)
+    say(null, false)
     startWatchers()
     input.focus()
   }
@@ -299,6 +327,8 @@
     video.muted = false
     unmuteButton.hidden = true
     modalNote.hidden = false
+    noteKey = 'modal.note'
+    renderNote()
     video.play()
   })
 
@@ -313,12 +343,12 @@
     stopWatchers()
     clearTimeout(deleteTimer)
 
-    var messages = {
-      devtools: 'Inspecter le code ? Le comité vous transmet le verdict.',
-      submit: 'Vote enregistré. Verification en cours...',
-      delete: 'Trop tard, le résultat est déjà certifié.',
+    var finalKeys = {
+      devtools: 'final.devtools',
+      submit: 'final.submit',
+      delete: 'final.delete',
     }
-    say(messages[reason] || messages.submit, false)
+    say(finalKeys[reason] || 'final.submit', false)
 
     input.value = ''
     input.setAttribute('readonly', 'readonly')
@@ -331,7 +361,7 @@
       if (index >= TARGET.length) {
         clearInterval(typer)
         if (SAFE) {
-          say('[safe] vidéo neutralisée, déclencheur : ' + reason, false)
+          say('safe', false, 'reason.' + reason)
           return
         }
         setTimeout(openVideo, 120)

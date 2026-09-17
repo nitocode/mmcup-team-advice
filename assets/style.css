@@ -553,3 +553,55 @@ body.modal-open {
   transform: translateY(2px);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9), 0 1px 0 #0d5a17;
 }
+
+/* ---------- language switch ---------- */
+
+.lang-switch {
+  position: fixed;
+  top: 52px;
+  left: 16px;
+  z-index: 6;
+  display: flex;
+  gap: 4px;
+  padding: 4px;
+  border: 2px solid #0c2a6d;
+  border-radius: 999px;
+  background: linear-gradient(#ffffff, #dbe9ff 48%, #a8c6f4);
+  box-shadow: 0 4px 0 #0c2a6d, 0 8px 16px rgba(0, 0, 0, 0.35);
+}
+
+.lang-button {
+  padding: 5px 11px;
+  border: 2px solid transparent;
+  border-radius: 999px;
+  background: transparent;
+  color: #34528c;
+  font-family: "Comic Sans MS", "Chalkboard SE", cursive;
+  font-size: 13px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.lang-button:hover {
+  color: #12224a;
+}
+
+.lang-button.is-active {
+  border-color: #0d5a17;
+  background: linear-gradient(#b6f58a, var(--grass) 48%, var(--grass-deep));
+  color: #fff;
+  text-shadow: 1px 1px 0 #0d5a17;
+}
+
+@media (max-width: 720px) {
+  .lang-switch {
+    top: 46px;
+    left: 10px;
+    padding: 3px;
+  }
+
+  .lang-button {
+    padding: 4px 9px;
+    font-size: 12px;
+  }
+}

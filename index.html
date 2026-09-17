@@ -4,10 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>MMCup 2026 — Le Grand Sondage Officiel</title>
-    <meta
-      name="description"
-      content="Sondage officiel de la MMCup. Saisissez librement le nom de l'équipe gagnante."
-    />
+    <meta name="description" data-i18n-content="doc.description" content="" />
     <link rel="icon" href="assets/logos/truffassons.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -34,7 +31,12 @@
       <span class="sparkle s4">&#10022;</span>
     </div>
 
-    <button id="guideDog" class="guide-dog" type="button" title="Mode chien guide">
+    <div class="lang-switch" role="group" data-i18n-aria-label="lang.switch" aria-label="">
+      <button type="button" class="lang-button" data-locale="fr" lang="fr">FR</button>
+      <button type="button" class="lang-button" data-locale="en" lang="en">EN</button>
+    </div>
+
+    <button id="guideDog" class="guide-dog" type="button" data-i18n-title="guideDog.title" title="">
       <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
         <ellipse cx="6.3" cy="10.1" rx="2.1" ry="2.6" transform="rotate(-20 6.3 10.1)" />
         <ellipse cx="10.4" cy="6.6" rx="2.1" ry="2.8" />
@@ -44,42 +46,33 @@
           d="M12.7 11.3c3 0 5.4 2.3 5.4 5.1 0 2.2-1.7 3.7-3.9 3.7-.9 0-1.2-.2-1.5-.2s-.6.2-1.5.2c-2.2 0-3.9-1.5-3.9-3.7 0-2.8 2.4-5.1 5.4-5.1Z"
         />
       </svg>
-      <span>Chien guide</span>
+      <span data-i18n="guideDog"></span>
     </button>
 
     <div class="ticker" aria-hidden="true">
       <div class="ticker-track">
-        <span>
-          &#10022; SONDAGE OFFICIEL DE LA MMCUP &#10022; 100&nbsp;% INDEPENDANT &#10022; AUCUNE
-          INFLUENCE EXTERIEURE &#10022; VOTEZ EN TOUTE LIBERTE &#10022; RESULTATS CERTIFIES PAR
-          NOS SERVICES &#10022;
-        </span>
-        <span>
-          &#10022; SONDAGE OFFICIEL DE LA MMCUP &#10022; 100&nbsp;% INDEPENDANT &#10022; AUCUNE
-          INFLUENCE EXTERIEURE &#10022; VOTEZ EN TOUTE LIBERTE &#10022; RESULTATS CERTIFIES PAR
-          NOS SERVICES &#10022;
-        </span>
+        <span data-i18n="ticker"></span>
+        <span data-i18n="ticker"></span>
       </div>
     </div>
 
     <main class="stage">
-      <p class="kicker">&#9733; Edition 2026 &#9733;</p>
-      <h1 class="title">Qui va gagner la MMCup&nbsp;?</h1>
-      <p class="subtitle">
-        Tapez le nom de l'équipe gagnante. Réponse totalement libre, promis juré.
-      </p>
+      <p class="kicker" data-i18n="kicker"></p>
+      <h1 class="title" data-i18n="title"></h1>
+      <p class="subtitle" data-i18n="subtitle"></p>
 
       <section class="panel">
         <span class="sticker">NEW!</span>
 
         <form id="voteForm" autocomplete="off" novalidate>
-          <label class="field-label" for="teamInput">Nom de l'équipe gagnante</label>
+          <label class="field-label" for="teamInput" data-i18n="field.label"></label>
           <input
             id="teamInput"
             class="field"
             type="text"
             name="team"
-            placeholder="Saisissez votre réponse ici..."
+            data-i18n-placeholder="field.placeholder"
+            placeholder=""
             autocomplete="off"
             autocapitalize="off"
             autocorrect="off"
@@ -87,24 +80,22 @@
             enterkeyhint="send"
           />
           <p id="hint" class="hint" role="status">&nbsp;</p>
-          <button class="vote-button" type="submit">Valider mon vote</button>
+          <button class="vote-button" type="submit" data-i18n="vote"></button>
         </form>
 
-        <p class="fineprint">
-          Votre vote est anonyme, chiffré, et relu par un comité de chiens indépendants.
-        </p>
+        <p class="fineprint" data-i18n="fineprint"></p>
       </section>
 
       <div class="counter" aria-hidden="true">
-        <span class="counter-label">Visiteurs</span>
+        <span class="counter-label" data-i18n="counter.label"></span>
         <span class="counter-digits" id="counter">0000137</span>
       </div>
 
       <footer class="footer">
-        <span class="badge">Best viewed in 1024 &times; 768</span>
-        <span class="badge">Optimisé pour Internet Explorer 8</span>
-        <span class="badge">Powered by HTML5 &amp; friendship</span>
-        <p class="copyright">© 2026 Comité d'organisation de la MMCup — tous droits réservés</p>
+        <span class="badge" data-i18n="badge.viewed"></span>
+        <span class="badge" data-i18n="badge.ie"></span>
+        <span class="badge" data-i18n="badge.powered"></span>
+        <p class="copyright" data-i18n="copyright"></p>
       </footer>
     </main>
 
@@ -112,8 +103,16 @@
       <div id="modalBackdrop" class="modal-backdrop"></div>
       <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
         <div class="modal-bar">
-          <span id="modalTitle" class="modal-title">&#10022; Le verdict officiel &#10022;</span>
-          <button id="modalClose" class="modal-close" type="button" aria-label="Fermer">&times;</button>
+          <span id="modalTitle" class="modal-title" data-i18n="modal.title"></span>
+          <button
+            id="modalClose"
+            class="modal-close"
+            type="button"
+            data-i18n-aria-label="modal.close"
+            aria-label=""
+          >
+            &times;
+          </button>
         </div>
         <div class="modal-video">
           <video id="verdictVideo" class="modal-media" playsinline controls preload="auto">
@@ -121,12 +120,19 @@
           </video>
         </div>
         <p class="modal-foot">
-          <span id="modalNote">Résultat certifié par le comité d'organisation.</span>
-          <button id="unmuteButton" class="modal-unmute" type="button" hidden>Activer le son</button>
+          <span id="modalNote" data-i18n="modal.note"></span>
+          <button
+            id="unmuteButton"
+            class="modal-unmute"
+            type="button"
+            data-i18n="modal.unmute"
+            hidden
+          ></button>
         </p>
       </div>
     </div>
 
+    <script src="assets/i18n.js"></script>
     <script src="assets/app.js"></script>
   </body>
 </html>
